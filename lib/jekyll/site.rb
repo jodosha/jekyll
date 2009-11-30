@@ -93,12 +93,13 @@ module Jekyll
     def process
       self.reset
       self.read_filters
+      self.read_tags
       self.read_layouts
       self.transform_pages
       self.write_posts
     end
 
-    # Read all the filters in <source>/_filters and made them available.
+    # Read all the filters in <source>/_filters and make them available.
     #
     # Returns nothing
     def read_filters
@@ -110,6 +111,20 @@ module Jekyll
       end
     rescue Errno::ENOENT => e
       # ignore missing filters dir
+    end
+
+    # Read all the Liquid tags in <source>/_tags and make them available.
+    #
+    # Returns nothing
+    def read_tags
+      Dir[File.join(self.source, "_tags", "**", "*.rb")].each do |file|
+        require file
+
+        file = File.basename(file).gsub(".rb", "")
+        self.instance_eval %{ Liquid::Template.register_tag('#{file}', #{file.classify}) }
+      end
+    rescue Errno::ENOENT => e
+      # ignore missing tags dir
     end
 
     # Read all the files in <source>/_layouts into memory for later use.

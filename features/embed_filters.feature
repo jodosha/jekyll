@@ -69,4 +69,3 @@ Feature: Embed filters
     When I run jekyll
     Then the _site directory should exist
     And I should see "!dlroW ,ollEH" in "_site/2009/03/27/star-wars.html"
-

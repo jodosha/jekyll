@@ -52,6 +52,21 @@ module ReverseFilter
 end
 FILTER
     end
+  elsif dir == "_tags"
+    File.open(File.join(dir, 'javascript_include_tag.rb'), 'w') do |f|
+      f.write <<-TAG
+class JavascriptIncludeTag < Liquid::Tag
+  def initialize(tag_name, src, tokens)
+    super
+    @src = src
+  end
+
+  def render(context)
+    '<script src="/javascripts/jquery.js" type="text/javascript"></script>'
+  end
+end
+TAG
+    end
   end
 end
 
@@ -133,6 +148,10 @@ end
 
 Then /^I should see "(.*)" in "(.*)"$/ do |text, file|
   assert_match Regexp.new(text), File.open(file).readlines.join
+end
+
+Then /^I should see '<script src="([^\"]*)" type="text\/javascript"><\/script>' in "([^\"]*)"$/ do |src, file|
+  assert_match Regexp.new(src), File.open(file).readlines.join
 end
 
 Then /^the "(.*)" file should not exist$/ do |file|

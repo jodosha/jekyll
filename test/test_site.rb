@@ -32,6 +32,11 @@ class TestSite < Test::Unit::TestCase
       assert JekyllFilter.new.respond_to?(:reverse)
     end
 
+    should "read tags" do
+      @site.read_tags
+      assert_equal JavascriptIncludeTag, Liquid::Template.tags['javascript_include_tag']
+    end
+
     should "read layouts" do
       @site.read_layouts
       assert_equal ["default", "simple"].sort, @site.layouts.keys.sort
