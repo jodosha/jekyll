@@ -51,10 +51,22 @@ Feature: Embed filters
     Given I have a _posts directory
     And I have a _layouts directory
     And I have the following post:
-      | title     | date      | layout  | content                                      |
+      | title     | date      | layout  | content                                     |
       | Star Wars | 3/27/2009 | default | These aren't the droids you're looking for. |
     And I have a default layout that contains "By {{ '_Obi-wan_' | textilize }}"
     When I run jekyll
     Then the _site directory should exist
     And I should see "By <p><em>Obi-wan</em></p>" in "_site/2009/03/27/star-wars.html"
+
+  Scenario: Custom filters
+    Given I have a _posts directory
+    And I have a _layouts directory
+    And I have a _filters directory
+    And I have the following post:
+      | title     | date      | layout  | content                                     |
+      | Star Wars | 3/27/2009 | default | These aren't the droids you're looking for. |
+    And I have a default layout that contains "{{ "HEllo, World!" | reverse }}"
+    When I run jekyll
+    Then the _site directory should exist
+    And I should see "!dlroW ,ollEH" in "_site/2009/03/27/star-wars.html"
 

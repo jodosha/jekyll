@@ -41,6 +41,18 @@ end
 
 Given /^I have a (.*) directory$/ do |dir|
   FileUtils.mkdir(dir)
+
+  if dir == "_filters"
+    File.open(File.join(dir, 'reverse_filter.rb'), 'w') do |f|
+      f.write <<-FILTER
+module ReverseFilter
+  def reverse(input)
+    input.reverse
+  end
+end
+FILTER
+    end
+  end
 end
 
 Given /^I have the following posts?(?: (.*) "(.*)")?:$/ do |direction, folder, table|

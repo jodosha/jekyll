@@ -28,3 +28,9 @@ class Date
     strftime("%Y-%m-%dT%H:%M:%S%Z")
   end if RUBY_VERSION < '1.9'
 end
+
+class String
+  def classify
+    self.capitalize.gsub(/\_('?[a-z])/) { $1.capitalize }
+  end
+end

@@ -92,9 +92,24 @@ module Jekyll
     # Returns nothing
     def process
       self.reset
+      self.read_filters
       self.read_layouts
       self.transform_pages
       self.write_posts
+    end
+
+    # Read all the filters in <source>/_filters and made them available.
+    #
+    # Returns nothing
+    def read_filters
+      Dir[File.join(self.source, "_filters", "**", "*.rb")].each do |file|
+        require file
+
+        file = File.basename(file).gsub(".rb", "")
+        Jekyll::Filters.class_eval %{ include #{file.classify} }
+      end
+    rescue Errno::ENOENT => e
+      # ignore missing filters dir
     end
 
     # Read all the files in <source>/_layouts into memory for later use.

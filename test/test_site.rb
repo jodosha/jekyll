@@ -26,6 +26,12 @@ class TestSite < Test::Unit::TestCase
       assert_equal before_categories, @site.categories.length
     end
 
+    should "read filters" do
+      @site.read_filters
+      class JekyllFilter; include Jekyll::Filters end
+      assert JekyllFilter.new.respond_to?(:reverse)
+    end
+
     should "read layouts" do
       @site.read_layouts
       assert_equal ["default", "simple"].sort, @site.layouts.keys.sort
